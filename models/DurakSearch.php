@@ -1,15 +1,16 @@
 <?php
 
-namespace kouosl\sample\models;
+namespace kouosl\service\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\models\Durak;
 
 /**
- * SampleSearch represents the model behind the search form about `app\modules\sample\models\Sample`.
+ * DurakSearch represents the model behind the search form about `app\models\Durak`.
  */
-class SamplesSearch extends Samples
+class DurakSearch extends Durak
 {
     /**
      * @inheritdoc
@@ -17,8 +18,8 @@ class SamplesSearch extends Samples
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['title', 'description'], 'safe'],
+            [['isim', 'ogretimturu'], 'safe'],
+            [['ogretim_id'], 'integer'],
         ];
     }
 
@@ -40,7 +41,9 @@ class SamplesSearch extends Samples
      */
     public function search($params)
     {
-        $query = Samples::find();
+        $query = Durak::find();
+
+        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -54,12 +57,13 @@ class SamplesSearch extends Samples
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'ogretim_id' => $this->ogretim_id,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'isim', $this->isim])
+            ->andFilterWhere(['like', 'ogretimturu', $this->ogretimturu]);
 
         return $dataProvider;
     }
