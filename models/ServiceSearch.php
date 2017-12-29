@@ -5,12 +5,12 @@ namespace kouosl\service\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Durak;
+use kouosl\service\models\Service;
 
 /**
- * DurakSearch represents the model behind the search form about `app\models\Durak`.
+ * ServiceSearch represents the model behind the search form about `kouosl\service\models\Service`.
  */
-class DurakSearch extends Durak
+class ServiceSearch extends Service
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class DurakSearch extends Durak
     public function rules()
     {
         return [
-            [['isim', 'ogretimturu'], 'safe'],
-            [['ogretim_id'], 'integer'],
+            [['isim', 'soyad', 'duraklar', 'kalkisaatleri'], 'safe'],
+            [['telefon', 'ogretim_id'], 'integer'],
         ];
     }
 
@@ -41,7 +41,7 @@ class DurakSearch extends Durak
      */
     public function search($params)
     {
-        $query = Durak::find();
+        $query = Service::find();
 
         // add conditions that should always apply here
 
@@ -59,11 +59,14 @@ class DurakSearch extends Durak
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'telefon' => $this->telefon,
             'ogretim_id' => $this->ogretim_id,
+            'kalkisaatleri' => $this->kalkisaatleri,
         ]);
 
         $query->andFilterWhere(['like', 'isim', $this->isim])
-            ->andFilterWhere(['like', 'ogretimturu', $this->ogretimturu]);
+            ->andFilterWhere(['like', 'soyad', $this->soyad])
+            ->andFilterWhere(['like', 'duraklar', $this->duraklar]);
 
         return $dataProvider;
     }
